@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-zinc-900 min-h-screen w-full text-white p-10">
+    <div class="flex justify-end">
+        <a href="/logout" class="bg-red-500 px-3 py-2 rounded-md">logout</a>
+    </div>
+    <div class="">
+        <h3 class="text-3xl mb-5">Profile</h3>
+        <div class="flex gap-2 items-center mb-2">
+            <img class="w-10 h-10 rounded-full overflow-hidden object-cover" src="/images/uploads/<%= user.profilePic %>" alt="profile pic">
+            <h3 class="text-3xl">Hello, <%= user.name %></h3>
+        </div>
+        <a href="/profile/upload" class="text-sm tracking-tight text-green-300">Edit profile pic</a>
+        <h5 class="mb-5">You can create a new post.</h5>
+        <form action="/post" method="post">
+            <textarea placeholder="What's on your mind?" class="block p-2 w-1/3 outline-none rounded-md resize-none border-2 border-zinc-800 bg-transparent" name="content"></textarea>
+            <input class="w-40 bg-blue-500 px-3 py-2 rounded-md block mt-5 text-sm" type="submit" value="Create Post">
+        </form>
+    </div>
+    <div class="posts mt-20">
+        <h3 class="text-zinc-400">Your posts.</h3>
+        <div class="postcontainermt-5 flex flex-wrap gap-2">
+            <% user.posts.reverse().forEach((post) => { %>
+                <div class="post w-1/3 p-4 rounded-md border-2 border-zinc-700 bg-zinc-800">
+                    <div class="flex justify-between">
+                        <h4 class="text-blue-500 mb-2">@<%= user.username %></h4>
+                        <span><%= post.date.toString().replace("GMT+0530 (India Standard Time)", "") %></span>
+                    </div>
+                    <p class="text-sm tracking-tight"><%= post.content %></p>
+                    <div class="btns flex gap-4 mt-5 items-center">
+                        <span>
+                            <span class="border-1 p-1 w-8 h-8 text-center inline-block border-blue-500 rounded-full"><%= post.likes.length %></span>
+                            <a class="text-blue-500" href="/like/<%= post._id %>">
+                                <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
+                            </a>
+                        </span>
+                        <a class="text-zinc-500" href="/edit/<%= post._id %>">Edit</a>
+                    </div>
+                </div>
+            <% }) %>
+
+        </div>
+    </div>
+</body>
+</html>
